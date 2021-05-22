@@ -6,11 +6,13 @@ variables:
   CONTAINER_PROD_IMAGE: ${REGISTRY_HOST}/digitalplatformservices/identity/indy-sdk-builder:latest
 
 
+
 stages:
   - build
+  - upload-package
 
 
-Build Indy: 
+build-indy-sdk: 
   image: ${REGISTRY_HOST}/digitalplatformservices/identity/indy-sdk-builder:latest
   stage: build
   script:
@@ -18,20 +20,28 @@ Build Indy:
   - pwd
   - echo "Home is ${HOME}"
   - echo "path is ${PATH}"
-  - cd libindy
-  - cargo build --release
-  - cp target/*/libindy.so "$HOME/.local/lib"
-  - cd ../cli
-  - cargo build --release 
-  - cp target/*/indy-cli "$HOME/.local/bin"
-  - cd ../experimental/plugins/postgres_storage/
-  - cargo build --release 
-  - cp target/*/libindystrgpostgres.so "$HOME/.local/lib"
-  - echo "ls -l /home/indy/.local/lib"
-  - ls -l /home/indy/.local/lib
-  - echo "ls -l /home/indy/.local/bin"
-  - ls -l /home/indy/.local/bin
-  - 'curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file experimental/plugins/postgres_storage/target/release/libindystrgpostgres.so "${CI_API_V4_URL}/projects/14/packages/generic/indy-sdk-postgres/1.0.0/libindystrgpostgres.so"'
-  #artifacts:
-    #paths:
-    #- experimental/plugins/postgres_storage/target/*/libindystrgpostgres.so
+  - echo "Build DIR is ${CI_PROJECT_DIR}"
+  # - cd libindy
+  # - cargo build --release
+  # - cp target/*/libindy.so "$HOME/.local/lib"
+  # - cd ../cli
+  # - cargo build --release 
+  # - cp target/*/indy-cli "$HOME/.local/bin"
+  # - cd ../experimental/plugins/postgres_storage/
+  # - cargo build --release 
+  # - cp target/*/libindystrgpostgres.so "$HOME/.local/lib"
+  # - echo "ls -l /home/indy/.local/lib"
+  # - ls -l /home/indy/.local/lib
+  # - echo "ls -l /home/indy/.local/bin"
+  # - ls -l /home/indy/.local/bin
+  # - 'curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file experimental/plugins/postgres_storage/target/release/libindystrgpostgres.so "${CI_API_V4_URL}/projects/14/packages/generic/indy-sdk-postgres/1.0.0/libindystrgpostgres.so"'
+  artifacts:
+    paths:
+    - experimental/plugins/postgres_storage/target/*/libindystrgpostgres.so
+
+
+# upload-postgres-package: 
+#   image: ${REGISTRY_HOST}/digitalplatformservices/identity/indy-sdk-builder:latest
+#   stage: upload-package
+#   script:
+#   - 'curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file experimental/plugins/postgres_storage/target/release/libindystrgpostgres.so "${CI_API_V4_URL}/projects/14/packages/generic/indy-sdk-postgres/1.0.0/libindystrgpostgres.so"'
