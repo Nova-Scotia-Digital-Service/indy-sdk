@@ -4,6 +4,7 @@ variables:
   REGISTRY_HOST: harbor.novascotia.ca
   CONTAINER_BUILD_IMAGE: ${REGISTRY_HOST}/digitalplatformservices/identity/indy-sdk-builder:${CI_COMMIT_SHORT_SHA}
   CONTAINER_PROD_IMAGE: ${REGISTRY_HOST}/digitalplatformservices/identity/indy-sdk-builder:latest
+  GITLAB_PACKAGE_PROJECT_ID: 14
   PACKAGE_VERSION: "0.0.2"
 
 
@@ -22,23 +23,20 @@ build-indy-sdk:
   - echo "path is ${PATH}"
   - echo "Build DIR is ${CI_PROJECT_DIR}"
   - echo "API URL is ${CI_API_V4_URL}"
-  - echo "Registry TOken is ${GITLAB_REGISTRY_ACCESS_TOKEN}"
-  - 'curl  --header "PRIVATE-TOKEN: ${GITLAB_REGISTRY_ACCESS_TOKEN}" --upload-file ${CI_PROJECT_DIR}/LICENSE "${CI_API_V4_URL}/projects/14/packages/generic/test/1.0.1/TEST"'
-
-  # - cd libindy
-  # - cargo build --release
-  # - cp target/*/libindy.so "$HOME/.local/lib"
-  # - cd ../cli
-  # - cargo build --release 
-  # - cp target/*/indy-cli "$HOME/.local/bin"
-  # - cd ../experimental/plugins/postgres_storage/
-  # - cargo build --release 
-  # - cp target/*/libindystrgpostgres.so "$HOME/.local/lib"
-  # - echo "ls -l /home/indy/.local/lib"
-  # - ls -l /home/indy/.local/lib
-  # - echo "ls -l /home/indy/.local/bin"
-  # - ls -l /home/indy/.local/bin
-  #- 'curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file ${CI_PROJECT_DIR}/experimental/plugins/postgres_storage/target/release/libindystrgpostgres.so "${CI_API_V4_URL}/projects/14/packages/generic/indy-sdk-postgres/${PACKAGE_VERSION}/libindystrgpostgres.so"'  
+  - cd libindy
+  - cargo build --release
+  - cp target/*/libindy.so "$HOME/.local/lib"
+  - cd ../cli
+  - cargo build --release 
+  - cp target/*/indy-cli "$HOME/.local/bin"
+  - cd ../experimental/plugins/postgres_storage/
+  - cargo build --release 
+  - cp target/*/libindystrgpostgres.so "$HOME/.local/lib"
+  - echo "ls -l /home/indy/.local/lib"
+  - ls -l /home/indy/.local/lib
+  - echo "ls -l /home/indy/.local/bin"
+  - ls -l /home/indy/.local/bin
+  - 'curl -L --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file ${CI_PROJECT_DIR}/experimental/plugins/postgres_storage/target/release/libindystrgpostgres.so "${CI_API_V4_URL}/projects/${GITLAB_PACKAGE_PROJECT_ID}/packages/generic/indy-sdk-postgres/${PACKAGE_VERSION}/libindystrgpostgres.so"'  
   artifacts:
     paths:
     - experimental/plugins/postgres_storage/target/release/libindystrgpostgres.so
