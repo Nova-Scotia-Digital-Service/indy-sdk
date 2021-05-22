@@ -23,7 +23,7 @@ build-indy-sdk:
   - echo "Build DIR is ${CI_PROJECT_DIR}"
   - echo "API URL is ${CI_API_V4_URL}"
   - echo "Registry TOken is ${GITLAB_REGISTRY_ACCESS_TOKEN}"
-  - 'curl -L --header "PRIVATE-TOKEN: ${GITLAB_REGISTRY_ACCESS_TOKEN}" --upload-file ${CI_PROJECT_DIR}/LICENSE "${CI_API_V4_URL}/projects/14/packages/generic/test/1.0.0/TEST"'
+  - 'curl  --header "PRIVATE-TOKEN: ${GITLAB_REGISTRY_ACCESS_TOKEN}" --upload-file ${CI_PROJECT_DIR}/LICENSE "${CI_API_V4_URL}/projects/14/packages/generic/test/1.0.1/TEST"'
 
   # - cd libindy
   # - cargo build --release
