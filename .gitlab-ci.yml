@@ -21,29 +21,32 @@ build-indy-sdk:
   - echo "Home is ${HOME}"
   - echo "path is ${PATH}"
   - echo "Build DIR is ${CI_PROJECT_DIR}"
-  - cd libindy
-  - cargo build --release
-  - cp target/*/libindy.so "$HOME/.local/lib"
-  - cd ../cli
-  - cargo build --release 
-  - cp target/*/indy-cli "$HOME/.local/bin"
-  - cd ../experimental/plugins/postgres_storage/
-  - cargo build --release 
-  - cp target/*/libindystrgpostgres.so "$HOME/.local/lib"
-  - echo "ls -l /home/indy/.local/lib"
-  - ls -l /home/indy/.local/lib
-  - echo "ls -l /home/indy/.local/bin"
-  - ls -l /home/indy/.local/bin
+  - echo "API URL is ${CI_API_V4_URL}"
+  # - cd libindy
+  # - cargo build --release
+  # - cp target/*/libindy.so "$HOME/.local/lib"
+  # - cd ../cli
+  # - cargo build --release 
+  # - cp target/*/indy-cli "$HOME/.local/bin"
+  # - cd ../experimental/plugins/postgres_storage/
+  # - cargo build --release 
+  # - cp target/*/libindystrgpostgres.so "$HOME/.local/lib"
+  # - echo "ls -l /home/indy/.local/lib"
+  # - ls -l /home/indy/.local/lib
+  # - echo "ls -l /home/indy/.local/bin"
+  # - ls -l /home/indy/.local/bin
   #- 'curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file ${CI_PROJECT_DIR}/experimental/plugins/postgres_storage/target/release/libindystrgpostgres.so "${CI_API_V4_URL}/projects/14/packages/generic/indy-sdk-postgres/${PACKAGE_VERSION}/libindystrgpostgres.so"'  
   artifacts:
     paths:
     - experimental/plugins/postgres_storage/target/release/libindystrgpostgres.so
 
-
+#Upload to shared package registry for tags only 
 upload-postgres-package: 
   image: ${REGISTRY_HOST}/digitalplatformservices/identity/indy-sdk-builder:latest
   stage: upload-package
   script:
   - echo "${CI_PROJECT_DIR}/experimental/plugins/postgres_storage/target/release/"
   - ls ${CI_PROJECT_DIR}/experimental/plugins/postgres_storage/target/release/
-  - 'curl --header "PRIVATE-TOKEN: ${GITLAB_REGISTRY_ACCESS_TOKEN}" --upload-file ${CI_PROJECT_DIR}/experimental/plugins/postgres_storage/target/release/libindystrgpostgres.so "${CI_API_V4_URL}/projects/14/packages/generic/indy-sdk-postgres/${PACKAGE_VERSION}/libindystrgpostgres.so"'
+  #- 'curl --header "PRIVATE-TOKEN: ${GITLAB_REGISTRY_ACCESS_TOKEN}" --upload-file ${CI_PROJECT_DIR}/experimental/plugins/postgres_storage/target/release/libindystrgpostgres.so "${CI_API_V4_URL}/projects/14/packages/generic/indy-sdk-postgres/${CI_COMMIT_TAG}/libindystrgpostgres.so"'
+  only:
+  - tags
