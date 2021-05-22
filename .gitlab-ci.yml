@@ -27,6 +27,10 @@ Build Indy:
   - cd ../experimental/plugins/postgres_storage/
   - cargo build --release 
   - cp target/*/libindystrgpostgres.so "$HOME/.local/lib"
+  - echo "ls -l /home/indy/.local/lib"
+  - ls -l /home/indy/.local/lib
+  - echo "ls -l /home/indy/.local/bin"
+  - ls -l /home/indy/.local/bin
   artifacts:
     paths:
     - /home/indy/.local/lib/*
