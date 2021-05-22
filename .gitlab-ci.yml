@@ -33,5 +33,4 @@ Build Indy:
   - ls -l /home/indy/.local/bin
   artifacts:
     paths:
-    - /home/indy/.local/lib/
-    - /home/indy/.local/bin/
+    - /home/indy/.local/lib/*.so
