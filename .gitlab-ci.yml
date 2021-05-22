@@ -4,7 +4,7 @@ variables:
   REGISTRY_HOST: harbor.novascotia.ca
   CONTAINER_BUILD_IMAGE: ${REGISTRY_HOST}/digitalplatformservices/identity/indy-sdk-builder:${CI_COMMIT_SHORT_SHA}
   CONTAINER_PROD_IMAGE: ${REGISTRY_HOST}/digitalplatformservices/identity/indy-sdk-builder:latest
-  PACKAGE_VERSION: "0.0.1"
+  PACKAGE_VERSION: "0.0.2"
 
 
 stages:
@@ -34,8 +34,7 @@ build-indy-sdk:
   - ls -l /home/indy/.local/lib
   - echo "ls -l /home/indy/.local/bin"
   - ls -l /home/indy/.local/bin
-  # - 'curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file experimental/plugins/postgres_storage/target/release/libindystrgpostgres.so "${CI_API_V4_URL}/projects/14/packages/generic/indy-sdk-postgres/${PACKAGE_VERSION}/libindystrgpostgres.so"'
-  artifacts:
+  - 'curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file ${CI_PROJECT_DIR}/experimental/plugins/postgres_storage/target/release/libindystrgpostgres.so "${CI_API_V4_URL}/projects/14/packages/generic/indy-sdk-postgres/${PACKAGE_VERSION}/libindystrgpostgres.so"'  artifacts:
     paths:
     - experimental/plugins/postgres_storage/target/release/libindystrgpostgres.so
 
@@ -44,4 +43,6 @@ upload-postgres-package:
   image: ${REGISTRY_HOST}/digitalplatformservices/identity/indy-sdk-builder:latest
   stage: upload-package
   script:
-  - 'curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file ${CI_PROJECT_DIR}/experimental/plugins/postgres_storage/target/release/libindystrgpostgres.so "${CI_API_V4_URL}/projects/14/packages/generic/indy-sdk-postgres/${PACKAGE_VERSION}/libindystrgpostgres.so"'
+  - Echo "${CI_PROJECT_DIR}/experimental/plugins/postgres_storage/target/release/"
+  - ls ${CI_PROJECT_DIR}/experimental/plugins/postgres_storage/target/release/
+  #- 'curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file ${CI_PROJECT_DIR}/experimental/plugins/postgres_storage/target/release/libindystrgpostgres.so "${CI_API_V4_URL}/projects/14/packages/generic/indy-sdk-postgres/${PACKAGE_VERSION}/libindystrgpostgres.so"'
