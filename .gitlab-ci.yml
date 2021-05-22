@@ -5,8 +5,11 @@ variables:
   CONTAINER_BUILD_IMAGE: ${REGISTRY_HOST}/digitalplatformservices/identity/indy-sdk-builder:${CI_COMMIT_SHORT_SHA}
   CONTAINER_PROD_IMAGE: ${REGISTRY_HOST}/digitalplatformservices/identity/indy-sdk-builder:latest
   GITLAB_PACKAGE_PROJECT_ID: 14
-  PACKAGE_VERSION: "0.0.2"
-
+  CARGO_HOME: $CI_PROJECT_DIR/.cargo
+  GITLAB_PACKAGE_FOLDER: packages/generic/indy-sdk-postgres
+  GITLAB_PACKAGE_VERSION: ${CI_COMMIT_TAG}
+  POSTGRES_RELEASE_PATH: experimental/plugins/postgres_storage/target/release
+  POSTGRES_RELEASE_ARTIFACT: libindystrgpostgres.so
 
 stages:
   - build
@@ -17,12 +20,12 @@ build-indy-sdk:
   image: ${REGISTRY_HOST}/digitalplatformservices/identity/indy-sdk-builder:latest
   stage: build
   script:
-  - echo "Current Directory"
-  - pwd
-  - echo "Home is ${HOME}"
-  - echo "path is ${PATH}"
-  - echo "Build DIR is ${CI_PROJECT_DIR}"
-  - echo "API URL is ${CI_API_V4_URL}"
+ # - echo "Current Directory"
+#  - pwd
+  #- echo "Home is ${HOME}"
+  #- echo "path is ${PATH}"
+  #- echo "Build DIR is ${CI_PROJECT_DIR}"
+  #- echo "API URL is ${CI_API_V4_URL}"
   - cd libindy
   - cargo build --release
   - cp target/*/libindy.so "$HOME/.local/lib"
@@ -33,13 +36,16 @@ build-indy-sdk:
   - cargo build --release 
   - cp target/*/libindystrgpostgres.so "$HOME/.local/lib"
   - echo "ls -l /home/indy/.local/lib"
-  - ls -l /home/indy/.local/lib
-  - echo "ls -l /home/indy/.local/bin"
-  - ls -l /home/indy/.local/bin
-  - 'curl -L --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file ${CI_PROJECT_DIR}/experimental/plugins/postgres_storage/target/release/libindystrgpostgres.so "${CI_API_V4_URL}/projects/${GITLAB_PACKAGE_PROJECT_ID}/packages/generic/indy-sdk-postgres/${PACKAGE_VERSION}/libindystrgpostgres.so"'  
+  #- ls -l /home/indy/.local/lib
+  #- echo "ls -l /home/indy/.local/bin"
+  #- ls -l /home/indy/.local/bin
+ # - 'curl -L --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file ${CI_PROJECT_DIR}/${POSTGRES_RELEASE_ARTIFACT} "${CI_API_V4_URL}/projects/${GITLAB_PACKAGE_PROJECT_ID}/packages/generic/indy-sdk-postgres/${PACKAGE_VERSION}/${POSTGRES_RELEASE_ARTIFACT}"'  
+  cache:
+    paths:
+      - .cargo  
   artifacts:
     paths:
-    - experimental/plugins/postgres_storage/target/release/libindystrgpostgres.so
+    - ${POSTGRES_RELEASE_PATH}/${POSTGRES_RELEASE_ARTIFACT}
 
 #Upload to shared package registry for tags only 
 upload-postgres-package: 
@@ -48,6 +54,8 @@ upload-postgres-package:
   script:
   - echo "${CI_PROJECT_DIR}/experimental/plugins/postgres_storage/target/release/"
   - ls ${CI_PROJECT_DIR}/experimental/plugins/postgres_storage/target/release/
+  - 'curl -L --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file ${CI_PROJECT_DIR}/${POSTGRES_RELEASE_PATH}/${POSTGRES_RELEASE_ARTIFACT} "${CI_API_V4_URL}/projects/${GITLAB_PACKAGE_PROJECT_ID}/${GITLAB_PACKAGE_FOLDER}/${GITLAB_PACKAGE_VERSION}/${POSTGRES_RELEASE_ARTIFACT}"'  
+
   #- 'curl --header "PRIVATE-TOKEN: ${GITLAB_REGISTRY_ACCESS_TOKEN}" --upload-file ${CI_PROJECT_DIR}/experimental/plugins/postgres_storage/target/release/libindystrgpostgres.so "${CI_API_V4_URL}/projects/14/packages/generic/indy-sdk-postgres/${CI_COMMIT_TAG}/libindystrgpostgres.so"'
   only:
   - tags
