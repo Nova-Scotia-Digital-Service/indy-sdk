@@ -15,4 +15,12 @@ Build Indy:
   stage: build
   script:
    - cd libindy
-   - cargo build --release
+   - cargo build --release && cp target/*/libindy.so "$HOME/.local/lib" && cargo clean
+   - cd ../cli
+   - cargo build --release && cp target/*/indy-cli "$HOME/.local/bin" && && cargo clean
+   - cd ../experimental/plugins/postgres_storage/
+   - cargo build --release && cp target/*/libindystrgpostgres.so "$HOME/.local/lib" && cargo clean
+  artifacts:
+    paths:
+    - $HOME/.local/lib/*
+    - $HOME/.local/bin/*
