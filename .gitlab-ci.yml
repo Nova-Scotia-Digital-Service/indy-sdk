@@ -46,6 +46,8 @@ build-indy-sdk:
   artifacts:
     paths:
     - ${POSTGRES_RELEASE_PATH}/${POSTGRES_RELEASE_ARTIFACT}
+  except: 
+  - tags
 
 #Upload to shared package registry for tags only 
 upload-postgres-package: 
