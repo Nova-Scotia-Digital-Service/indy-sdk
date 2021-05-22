@@ -10,9 +10,9 @@ stages:
   - build
 
 
-Build and Tag Docker Image: 
+Build Indy: 
   image: ${REGISTRY_HOST}/digitalplatformservices/identity/indy-sdk-builder:latest
   stage: build
   script:
-   - echo "Current Directory"
-   - pwd
+   - cd libindy
+   - cargo build --release
