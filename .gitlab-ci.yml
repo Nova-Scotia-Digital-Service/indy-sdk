@@ -33,4 +33,4 @@ Build Indy:
   - ls -l /home/indy/.local/bin
   artifacts:
     paths:
-    - experimental/plugins/postgres_storage/target/*.so
+    - experimental/plugins/postgres_storage/target/*/libindystrgpostgres.so
