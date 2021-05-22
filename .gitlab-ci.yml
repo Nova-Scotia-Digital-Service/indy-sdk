@@ -18,13 +18,16 @@ Build Indy:
   - pwd
   - echo "Home is ${HOME}"
   - echo "path is ${PATH}"
-   #- cd libindy
-   #- cargo build --release && cp target/*/libindy.so "$HOME/.local/lib" && cargo clean
-   #- cd ../cli
-   #- cargo build --release && cp target/*/indy-cli "$HOME/.local/bin" && cargo clean
-   #- cd ../experimental/plugins/postgres_storage/
-   #- cargo build --release && cp target/*/libindystrgpostgres.so "$HOME/.local/lib" && cargo clean
+   - cd libindy
+   - cargo build --release
+   - cp target/*/libindy.so "$HOME/.local/lib"
+   - cd ../cli
+   - cargo build --release 
+   - cp target/*/indy-cli "$HOME/.local/bin"
+   - cd ../experimental/plugins/postgres_storage/
+   - cargo build --release 
+   - cp target/*/libindystrgpostgres.so "$HOME/.local/lib"
   artifacts:
     paths:
-    - $HOME/.local/lib/*
-    - $HOME/.local/bin/*
+    - /home/indy/.local/lib/*
+    - /home/indy/.local/bin/*
