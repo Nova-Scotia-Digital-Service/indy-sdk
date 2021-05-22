@@ -1,0 +1,18 @@
+image: harbor.novascotia.ca/cts/devops-cicd:latest
+
+variables:
+  REGISTRY_HOST: harbor.novascotia.ca
+  CONTAINER_BUILD_IMAGE: ${REGISTRY_HOST}/digitalplatformservices/identity/indy-sdk-builder:${CI_COMMIT_SHORT_SHA}
+  CONTAINER_PROD_IMAGE: ${REGISTRY_HOST}/digitalplatformservices/identity/indy-sdk-builder:latest
+
+
+stages:
+  - build
+
+
+Build and Tag Docker Image: 
+  image: ${REGISTRY_HOST}/digitalplatformservices/identity/indy-sdk-builder:latest
+  stage: build
+  script:
+   - echo "Current Directory"
+   - pwd
