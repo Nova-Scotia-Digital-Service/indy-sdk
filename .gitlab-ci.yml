@@ -34,7 +34,7 @@ build-indy-sdk:
   - ls -l /home/indy/.local/lib
   - echo "ls -l /home/indy/.local/bin"
   - ls -l /home/indy/.local/bin
-  - 'curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file ${CI_PROJECT_DIR}/experimental/plugins/postgres_storage/target/release/libindystrgpostgres.so "${CI_API_V4_URL}/projects/14/packages/generic/indy-sdk-postgres/${PACKAGE_VERSION}/libindystrgpostgres.so"'  
+  #- 'curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file ${CI_PROJECT_DIR}/experimental/plugins/postgres_storage/target/release/libindystrgpostgres.so "${CI_API_V4_URL}/projects/14/packages/generic/indy-sdk-postgres/${PACKAGE_VERSION}/libindystrgpostgres.so"'  
   artifacts:
     paths:
     - experimental/plugins/postgres_storage/target/release/libindystrgpostgres.so
@@ -46,4 +46,4 @@ upload-postgres-package:
   script:
   - echo "${CI_PROJECT_DIR}/experimental/plugins/postgres_storage/target/release/"
   - ls ${CI_PROJECT_DIR}/experimental/plugins/postgres_storage/target/release/
-  #- 'curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file ${CI_PROJECT_DIR}/experimental/plugins/postgres_storage/target/release/libindystrgpostgres.so "${CI_API_V4_URL}/projects/14/packages/generic/indy-sdk-postgres/${PACKAGE_VERSION}/libindystrgpostgres.so"'
+  - 'curl --header "PRIVATE-TOKEN: ${GITLAB_REGISTRY_ACCESS_TOKEN}" --upload-file ${CI_PROJECT_DIR}/experimental/plugins/postgres_storage/target/release/libindystrgpostgres.so "${CI_API_V4_URL}/projects/14/packages/generic/indy-sdk-postgres/${PACKAGE_VERSION}/libindystrgpostgres.so"'
